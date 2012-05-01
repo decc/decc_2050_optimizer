@@ -4,7 +4,7 @@ class Candidate
   
   attr_accessor :gene
   
-  def initialize(gene = Decc2050ModelResult::CONTROL.map { rand(4)+1 }.join)
+  def initialize(gene = Candidate.random_gene)
     @gene = gene
   end
   
@@ -18,7 +18,8 @@ class Candidate
   
   def mutate
     new_gene = gene.dup
-    new_gene[rand(gene.size)] = (rand(4) + 1).to_s
+    i = rand(Candidate.acceptable_values.size)
+    new_gene[i] = Candidate.acceptable_values[i].random
     Candidate.new(new_gene)
   end
     
@@ -35,7 +36,32 @@ class Candidate
   end
   
   def inspect
-    "#{gene}: #{fitness}"
+    "#{gene} (with a greenhouse gas reduction of #{fitness}%)"
+  end
+    
+  @acceptable_values = ModelStructure.instance.types.map do |type|
+    case type
+    when 0, '0'; ['0']
+    when 1, '1', 'A'; ['1']
+    when 2, '2', 'B'; ['1','2']
+    when 3, '3', 'C'; ['1','2','3']
+    when 4, '4', 'D'; ['1','2','3','4']
+    end
   end
   
+  def self.acceptable_values
+    @acceptable_values
+  end
+  
+  def self.random_gene
+    acceptable_values.map.with_index do |a,i|
+      Candidate.acceptable_values[i].random
+    end.join
+  end
+end
+
+class Array
+  def random
+    at(rand(size))
+  end
 end

@@ -16,10 +16,12 @@ class Generation < Array
   
   def run!(number_of_generations = 20)
     number_of_generations.times do
-      puts "#{generation_number}: #{fittest.inspect}"
       next!
+      puts "The fittest candidate in generation #{generation_number} is #{fittest.first.inspect}"
     end
-    puts "#{generation_number}: #{fittest.inspect}"
+    puts
+    puts "The fittest candiate after #{generation_number} generations was:"
+    p fittest.first
   end
   
   def seed(initial_size = maximum_size)
@@ -27,6 +29,7 @@ class Generation < Array
       self << Candidate.new
     end
     sort_by_fitness!
+    puts "The fittest candidate in the random starting population is #{fittest.first.inspect}"
   end
   
   def space
@@ -38,30 +41,20 @@ class Generation < Array
   end
   
   def next!
-    # puts
-    # puts "Generation #{generation_number}"
     @generation_number += 1
     
     # Some of the previous generation die
-    #puts "Those about to die:"
     number_to_die_in_this_generation.times do
       sick_candidate = un_fitness_weighted_random_candidate
-      #p sick_candidate
       delete sick_candidate
     end
     
-    #puts "Generation #{generation_number} has #{space} spaces"   
-    
     # To be replaced by children
     space.times do
-      #puts "Those about to breed:"
       mum = fitness_weighted_random_candidate
       dad = fitness_weighted_random_candidate
       child = mum.cross(dad)
       child.mutate if rand < chance_of_mutation
-      # p mum
-      # p dad
-      # puts "  begets: #{child.inspect}"
       push child
     end
       
@@ -84,11 +77,9 @@ class Generation < Array
   
   def un_fitness_weighted_random_candidate
     target = rand(total_un_fitness)
-#    puts "Total: #{total_un_fitness} Max: #{fittest_candidates_fitness} Target: #{target}"
     current_sum = 0
     reverse.each do |candidate|
       current_sum = current_sum + (fittest_candidates_fitness - candidate.fitness)
- #     puts "#{candidate.fitness} -> #{current_sum}"
       return candidate if current_sum >= target
     end
     first

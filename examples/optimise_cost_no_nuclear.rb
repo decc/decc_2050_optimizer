@@ -1,6 +1,9 @@
 require_relative '../lib/decc_2050_optimizer'
 
 class Candidate
+  
+  # Set so that only level 1 nuclear is possible
+  self.acceptable_values[0] = ['1']
 
   def calculate_fitness
     return ( [ghg_reduction,80].min * 100) - cost
@@ -15,7 +18,7 @@ class Candidate
   end
   
   def inspect
-    "#{gene} (with a greenhouse gas reduction of #{ghg_reduction}%) and a point cost estimate of #{cost.round}"
+    "#{gene} (with a greenhouse gas reduction of #{ghg_reduction}% and a point cost estimate of #{cost.round})"
   end
   
 end
