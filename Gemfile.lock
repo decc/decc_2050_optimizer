@@ -1,0 +1,12 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    decc_2050_model (0.0.5)
+      ffi (>= 1.0.11)
+    ffi (1.0.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  decc_2050_model
