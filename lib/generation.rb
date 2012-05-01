@@ -30,6 +30,7 @@ class Generation < Array
     end
     sort_by_fitness!
     puts "The fittest candidate in the random starting population is #{fittest.first.inspect}"
+    puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest.first.gene}/primary_energy_chart"
   end
   
   def space

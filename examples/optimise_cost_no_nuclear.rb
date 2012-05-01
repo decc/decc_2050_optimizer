@@ -1,5 +1,15 @@
 require_relative '../lib/decc_2050_optimizer'
 
+puts <<EOT
+
+This optimisation seeks to minimise the point estimate of the average cost of the modelled
+energy system per capita 2010-2050, while at the same time:
+* beating the 2050 greenhouse gas reduction target of a 80% reduction on 1990 levels.
+* assumming no new nuclear power stations are built.
+
+EOT
+
+
 class Candidate
   
   # Set so that only level 1 nuclear is possible
