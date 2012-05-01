@@ -22,6 +22,8 @@ class Generation < Array
     puts
     puts "The fittest candiate after #{generation_number} generations was:"
     p fittest.first
+    puts
+    puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest.first.gene}/primary_energy_chart"
   end
   
   def seed(initial_size = maximum_size)
@@ -30,7 +32,6 @@ class Generation < Array
     end
     sort_by_fitness!
     puts "The fittest candidate in the random starting population is #{fittest.first.inspect}"
-    puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest.first.gene}/primary_energy_chart"
   end
   
   def space
