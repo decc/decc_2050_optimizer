@@ -27,7 +27,7 @@ module Decc2050Model
     
     # If specified, dump will have its #puts method called once for each candidate
     # in a generation with a string in the form:
-    # generation\tgene\tfitness
+    # gene\tgeneration\tfitness
     # dump would typically be an IO object, usually an open File but perhaps also
     # stdout.
     attr_accessor :dump
@@ -120,7 +120,7 @@ module Decc2050Model
     def dump_generation
       return unless dump
       this_generation.each do |candidate|
-        dump.puts "#{generation_number}\t#{candidate.gene}\t#{candidate.fitness}"
+        dump.puts "#{candidate.gene}\t#{generation_number}\t#{candidate.fitness}"
       end
     end
   

@@ -1,2 +1,6 @@
 
 examples/optimise_cost.tsv
+
+examples/.RData
+
+examples/optimise_cost_progress_scatter_plot.pdf
