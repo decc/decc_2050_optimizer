@@ -11,7 +11,10 @@ module Decc2050Model
     # This contians the number of the latest generation, starting at zero
     attr_accessor :generation_number
   
-    # This is the size of each generation, default is 100
+    # This is the size of each generation, a default is calculated
+    # as sqrt(G)*(log(G)**2) after Baum et al (2000) as reported in
+    # Mackay (1999) Rate of information aquisition of species subject
+    # to natural selection
     attr_accessor :generation_size
   
     # This is the chance of any position on a child gene being mutated, default is 0.01
@@ -24,7 +27,7 @@ module Decc2050Model
   
     def initialize
       @generation_number = 0
-      @generation_size = 100
+      @generation_size = calculate_default_generation_size
       @children_per_adult = 2
       @chance_of_mutation = 0.01
 
@@ -47,8 +50,6 @@ module Decc2050Model
       puts
       puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{generation.fittest.first.gene}/primary_energy_chart"
     end
-  
-    private
   
     def new_generation
       g = Array.new
@@ -91,6 +92,13 @@ module Decc2050Model
   
     def number_of_children
       generation_size * children_per_adult
+    end
+    
+    # TODO: What base should the logarithm be in?
+    # I'm assuming base 2 for the minute
+    def calculate_default_generation_size
+      g = Candidate.gene_size_in_bits
+      (Math.sqrt(g) * (Math.log2(g)**2)).round
     end
   
   end

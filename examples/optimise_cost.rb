@@ -30,6 +30,5 @@ class Decc2050Model::Candidate
 end
 
 o = Decc2050Model::Optimizer.new
-o.generation_size = 200
-o.run!(50)
+o.run!
 
