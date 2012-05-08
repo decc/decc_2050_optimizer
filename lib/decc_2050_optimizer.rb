@@ -23,8 +23,15 @@ module Decc2050Model
     # This is the number of children produced by each generation
     # Default is two per adult. Children are produced, but only
     # the fittest go on to produce the next generation.
-    attr_accessor :children_per_adult 
-  
+    attr_accessor :children_per_adult
+    
+    # If specified, dump will have its #puts method called once for each candidate
+    # in a generation with a string in the form:
+    # generation\tgene\tfitness
+    # dump would typically be an IO object, usually an open File but perhaps also
+    # stdout.
+    attr_accessor :dump
+    
     def initialize
       @generation_number = 0
       @generation_size = calculate_default_generation_size
@@ -35,12 +42,16 @@ module Decc2050Model
     end
   
     def run!(number_of_generations = 20)
-    
+      puts "Configured to run for #{number_of_generations} generations with #{generation_size} candidates in each generation, #{children_per_adult} children per adult and a #{chance_of_mutation} chance of mutation.\n\n"
+      dump_headers
+      
       generation.seed
-    
+      dump_generation
+      
       number_of_generations.times do
         next!
         puts "The fittest candidate in generation #{generation_number} is #{generation.fittest.first.inspect}"
+        dump_generation
       end
     
       puts
@@ -99,6 +110,18 @@ module Decc2050Model
     def calculate_default_generation_size
       g = Candidate.gene_size_in_bits
       (Math.sqrt(g) * (Math.log2(g)**2)).round
+    end
+    
+    def dump_headers
+      return unless dump
+      dump.puts "generation\tgene\tfitness"
+    end
+    
+    def dump_generation
+      return unless dump
+      this_generation.each do |candidate|
+        dump.puts "#{generation_number}\t#{candidate.gene}\t#{candidate.fitness}"
+      end
     end
   
   end
