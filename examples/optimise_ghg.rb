@@ -6,6 +6,7 @@ The default optimisation just seeks to minimise greenhouse gas emissions in 2050
 
 EOT
 
-g = Generation.new
-g.seed
-g.run!
+# See the calculate_fitness method on ../lib/candidate.rb for the definition
+
+o = Decc2050Model::Optimizer.new
+o.run!

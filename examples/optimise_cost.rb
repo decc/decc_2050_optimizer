@@ -9,7 +9,7 @@ reduction target of a 80% reduction on 1990 levels.
 EOT
 
 
-class Candidate
+class Decc2050Model::Candidate
 
   def calculate_fitness
     return ( [ghg_reduction,80].min * 100) - cost
@@ -29,8 +29,7 @@ class Candidate
   
 end
 
-g = Generation.new
-g.maximum_size = 200
-g.seed
-g.run!(50)
+o = Decc2050Model::Optimizer.new
+o.generation_size = 200
+o.run!(50)
 

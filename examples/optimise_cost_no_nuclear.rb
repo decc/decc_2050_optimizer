@@ -9,8 +9,7 @@ energy system per capita 2010-2050, while at the same time:
 
 EOT
 
-
-class Candidate
+class Decc2050Model::Candidate
   
   # Set so that only level 1 nuclear is possible
   self.acceptable_values[0] = ['1']
@@ -33,8 +32,7 @@ class Candidate
   
 end
 
-g = Generation.new
-g.maximum_size = 200
-g.seed
-g.run!(50)
+o = Decc2050Model::Optimizer.new
+o.run!(10)
+
 
