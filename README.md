@@ -1,6 +1,6 @@
 # OPTIMISER FOR THE DECC 2050 CALCULATOR TOOL
 
-This is a toy genetic algorithm (GA) optimiser for the DECC 2050 Pathways Calculator. 
+This is a toy genetic algorithm optimiser for the DECC 2050 Pathways Calculator. 
 It allows multi-criteria non-linear optimisation of possible pathways for the UK's energy system.
 
 Further detail on the overall project:
@@ -19,20 +19,24 @@ It has not been used in anger.
 Requires ruby 1.9.3 (www.ruby-lang.org)
 
 Requires the bundler gem:
-  sudo gem install bundler
+
+    sudo gem install bundler
 
 To install dependencies:
-  cd decc_2050_optimizer
-  bundler
+  
+    cd decc_2050_optimizer
+    bundler
   
 ## INSTRUCTIONS
 
 To run an example optimisation
-  cd decc_2050_optimizer
-  ruby examples/optimise_ghg.rb
+  
+    cd decc_2050_optimizer
+    ruby examples/optimise_ghg.rb
 
 To write your optimisation, take a look at:
-  examples/optimise_cost_no_nuclear.rb
+  
+    examples/optimise_cost_no_nuclear.rb
   
 ## HACKING
 
