@@ -6,7 +6,7 @@ module Decc2050Model
   
     # This contains an array containing the candidates in the latest generation
     attr_accessor :generation
-    alias :this_generation generation
+    alias :this_generation :generation
 
     # This contians the number of the latest generation, starting at zero
     attr_accessor :generation_number
