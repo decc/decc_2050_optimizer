@@ -32,6 +32,12 @@ module Decc2050Model
     # stdout.
     attr_accessor :dump
     
+    # If specified, this will be prepended to each row in the dump
+    attr_accessor :dump_prefix
+    
+    # If specified, this will be prepended to the header of the dump file
+    attr_accessor :dump_prefix_header
+    
     def initialize
       @generation_number = 0
       @generation_size = calculate_default_generation_size
@@ -114,13 +120,13 @@ module Decc2050Model
     
     def dump_headers
       return unless dump
-      dump.puts "generation\tgene\tfitness"
+      dump.puts "#{dump_prefix_header}generation\tgene\tfitness"
     end
     
     def dump_generation
       return unless dump
       this_generation.each do |candidate|
-        dump.puts "#{candidate.gene}\t#{generation_number}\t#{candidate.fitness}"
+        dump.puts "#{dump_prefix}#{candidate.gene}\t#{generation_number}\t#{candidate.fitness}"
       end
     end
   
