@@ -55,13 +55,23 @@ module Decc2050Model
       "#{gene} (with a greenhouse gas reduction of #{fitness}%)"
     end
     
-    @acceptable_values = ModelStructure.instance.types.map do |type|
-      case type
-      when 0, '0'; ['0']
-      when 1, '1', 'A'; ['1']
-      when 2, '2', 'B'; ['1','2']
-      when 3, '3', 'C'; ['1','2','3']
-      when 4, '4', 'D'; ['1','2','3','4']
+    @acceptable_values = ModelStructure.instance.types.map.with_index do |type,index|
+      if index <= 15 && index !=3 # Decimal points are allowed
+        case type
+        when 0, '0'     ; %w[0]
+        when 1, '1', 'A'; %w[1]
+        when 2, '2', 'B'; %w[1 b c d e f g h i j 2]
+        when 3, '3', 'C'; %w[1 b c d e f g h i j 2 l m n o p q r s t 3]
+        when 4, '4', 'D'; %w[1 b c d e f g h i j 2 l m n o p q r s t 3 v w x y z A B C D 4]
+        end
+      else
+        case type
+        when 0, '0'     ; %w[0]
+        when 1, '1', 'A'; %w[1]
+        when 2, '2', 'B'; %w[1 2]
+        when 3, '3', 'C'; %w[1 2 3]
+        when 4, '4', 'D'; %w[1 2 3 4]
+        end
       end
     end
   
