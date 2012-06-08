@@ -126,7 +126,7 @@ module Decc2050Model
     def dump_generation
       return unless dump
       this_generation.each do |candidate|
-        dump.puts "#{dump_prefix}#{candidate.gene}\t#{generation_number}\t#{candidate.fitness}"
+        dump.puts "#{dump_prefix}#{generation_number}#{candidate.gene}\t#{candidate.fitness}"
       end
     end
   
