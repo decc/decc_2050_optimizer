@@ -16,7 +16,10 @@ It has not been used in anger.
 
 ## INSTALATION
 
-Requires ruby 1.9.3 (www.ruby-lang.org)
+Requires:
+* ruby 1.9.3 (www.ruby-lang.org)
+* a standard C compiler and libraries
+* the R statistical package (only if you want to plot the visualisations)
 
 Requires the bundler gem:
 
