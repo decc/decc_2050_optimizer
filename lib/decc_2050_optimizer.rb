@@ -31,6 +31,10 @@ module Decc2050Model
     # dump would typically be an IO object, usually an open File but perhaps also
     # stdout.
     attr_accessor :dump
+
+    # If true, will not dump header into dump file. Default is nil (which is 
+    # the same as false in ruby) so headers will be dumped on every run.
+    attr_accessor :do_not_dump_header
     
     # If specified, this will be prepended to each row in the dump
     attr_accessor :dump_prefix
@@ -119,6 +123,7 @@ module Decc2050Model
     end
     
     def dump_headers
+      return if do_not_dump_header
       return unless dump
       dump.puts "#{dump_prefix_header}generation\tgene\tfitness"
     end
