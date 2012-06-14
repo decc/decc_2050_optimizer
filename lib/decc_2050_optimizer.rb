@@ -77,6 +77,9 @@ module Decc2050Model
       g.extend(Generation)
       g.generation_size = generation_size
       g
+    def reset!
+      @generation = nil
+      @generation_number = 0
     end
   
     def next!
