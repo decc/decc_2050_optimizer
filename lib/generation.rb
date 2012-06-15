@@ -3,6 +3,8 @@ module Decc2050Model
   module Generation
   
     attr_accessor :generation_size
+    attr_accessor :sender
+    attr_accessor :receiver
   
     def seed
       space.times do 
@@ -25,6 +27,7 @@ module Decc2050Model
     end
   
     def sort_by_fitness!
+      parallel_process_pathways if parallel_processing?
       self.sort_by! { |c| c.fitness }.reverse!
     end
   
@@ -34,7 +37,33 @@ module Decc2050Model
     
     def fittest_candidates_fitness
       first.fitness
-    end    
+    end
+
+
+    def parallel_processing?
+      sender && receiver
+    end
+
+    def parallel_process_pathways
+      send_pathways_out_for_calculation
+      gather_results_back
+    end
+
+    def send_pathways_out_for_calculation
+      @sent_pathways = {}
+      each do |candidate|
+        @sent_pathways[candidate.gene] = candidate
+        sender.send(candidate.gene)
+      end
+    end
+
+    def gather_results_back
+      size.times do 
+        performance = Marshal.load(receiver.recv(0))
+        gene = performance[:_id]
+        @sent_pathways[gene].performance = performance
+      end
+    end
   
   end
 end

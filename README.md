@@ -20,6 +20,7 @@ Requires:
 * ruby 1.9.3 (www.ruby-lang.org)
 * a standard C compiler and libraries
 * the R statistical package (only if you want to plot the visualisations)
+* the zeromq libary (only if you want to run in parallel processing mode)
 
 Requires the bundler gem:
 
@@ -32,6 +33,8 @@ To install dependencies:
   
 ## INSTRUCTIONS
 
+### STANDARD PROCESSING
+
 To run an example optimisation
   
     cd decc_2050_optimizer
@@ -40,6 +43,17 @@ To run an example optimisation
 To write your optimisation, take a look at:
   
     examples/optimise_cost_no_nuclear.rb
+
+### PARALELL PROCESSING
+
+The code has support for parallel processing. To use it, you must first run a few worker processes:
+
+    bundle exec lib/parallel_processing_worker.rb
+
+Then you should set the optimiser to use the workers, take a look at examples/optimise_cost_no_nuclear_parallel.rb or run it by:
+    
+    bundle exec examples/optimise_cost_no_nuclear_parallel.rb
+
   
 ## HACKING
 

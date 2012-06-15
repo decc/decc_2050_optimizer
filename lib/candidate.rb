@@ -11,6 +11,7 @@ module Decc2050Model
   class Candidate
   
     attr_accessor :gene
+    attr_accessor :performance
   
     def initialize(gene = Candidate.random_gene)
       @gene = gene

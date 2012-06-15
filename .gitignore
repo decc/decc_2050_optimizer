@@ -3,3 +3,5 @@ examples/*.tsv
 examples/*.pdf
 
 examples/.Rhistory
+
+lib/.generation.rb.swp

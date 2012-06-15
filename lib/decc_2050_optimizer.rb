@@ -55,6 +55,21 @@ module Decc2050Model
 
       @generation = new_generation
     end
+
+    # If you choose to use the parallel processing version you 
+    # need to call this before calling run
+    def setup_parallel_processing
+      require 'zmq'
+      @context = ZMQ::Context.new(1)
+
+      @sender = @context.socket(ZMQ::PUSH)
+      @sender.bind("tcp://*:5557")
+
+      @receiver = @context.socket(ZMQ::PULL)
+      @receiver.bind("tcp://*:5558")
+
+      @parallel_processing = true
+    end
   
     def run!(number_of_generations = 20)
 
@@ -136,6 +151,10 @@ module Decc2050Model
       g = Array.new
       g.extend(Generation)
       g.generation_size = generation_size
+      if @parallel_processing
+        g.sender = @sender
+        g.receiver = @receiver
+      end
       g
     end
   

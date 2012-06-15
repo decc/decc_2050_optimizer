@@ -4,9 +4,11 @@ GEM
     decc_2050_model (0.0.8)
       ffi (>= 1.0.11)
     ffi (1.0.11)
+    zmq (2.1.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   decc_2050_model
+  zmq
