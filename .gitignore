@@ -1,8 +1,5 @@
-
-examples/optimise_cost.tsv
-
 examples/.RData
+examples/*.tsv
+examples/*.pdf
 
-examples/optimise_cost_progress_scatter_plot.pdf
-
-examples/explore_generation_size.tsv
+examples/.Rhistory
