@@ -3,7 +3,12 @@ require_relative 'generation'
   
 module Decc2050Model
   class Optimizer
-  
+ 
+    # This contains the fittest candidate found. It is updated each generation.
+    # If the fittest candidate in the current generation is less fit than this
+    # candidate then this candidate will be kept.
+    attr_accessor :fittest_candidate
+
     # This contains an array containing the candidates in the latest generation
     attr_accessor :generation
     alias :this_generation :generation
@@ -52,6 +57,9 @@ module Decc2050Model
     end
   
     def run!(number_of_generations = 20)
+
+      start_time = Time.now
+
       puts "Configured to run for #{number_of_generations} generations with #{generation_size} candidates in each generation, #{children_per_adult} children per adult and a #{chance_of_mutation} chance of mutation.\n\n"
 
       dump_headers
@@ -62,17 +70,22 @@ module Decc2050Model
         dump_generation
       end
     
-      puts
-      puts "The fittest candiate after #{generation_number} generations was:"
-      p generation.fittest.first
+      puts "\nThe fittest candiate after #{generation_number} generations was:"
+      p fittest_candidate
     
-      puts
-      puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{generation.fittest.first.gene}/primary_energy_chart"
+      puts "\nInspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest_candidate.gene}/primary_energy_chart"
+
+      elapsed_time = Time.now - start_time
+      number_of_candidates_calculated = generation_size * number_of_generations
+      candidates_per_second = (number_of_candidates_calculated / elapsed_time).round
+
+      puts "\nThe elapsed time was #{elapsed_time} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
     end
   
     def reset!
       @generation = nil
       @generation_number = 0
+      @fittest_candidate = nil
     end
 
     def next!
@@ -101,6 +114,16 @@ module Decc2050Model
       # Cull the weakest
       next_generation.cull!
       
+      # Check if the fittest candidate in this generation is fitter
+      # than the fittest candidate of previous generations
+      fittest_candidate_in_this_generation = next_generation.fittest.first
+      @fittest_candidate ||= fittest_candidate_in_this_generation
+
+      if @fittest_candidate.fitness < fittest_candidate_in_this_generation.fitness
+        @fittest_candidate = fittest_candidate_in_this_generation
+      end
+
+
       # Keep the memory down
       self.generation = nil
       GC.start
