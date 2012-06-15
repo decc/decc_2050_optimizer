@@ -53,11 +53,9 @@ module Decc2050Model
   
     def run!(number_of_generations = 20)
       puts "Configured to run for #{number_of_generations} generations with #{generation_size} candidates in each generation, #{children_per_adult} children per adult and a #{chance_of_mutation} chance of mutation.\n\n"
+
       dump_headers
-      
-      generation.seed
-      dump_generation
-      
+
       number_of_generations.times do
         next!
         puts "The fittest candidate in generation #{generation_number} is #{generation.fittest.first.inspect}"
@@ -72,19 +70,16 @@ module Decc2050Model
       puts "Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{generation.fittest.first.gene}/primary_energy_chart"
     end
   
-    def new_generation
-      g = Array.new
-      g.extend(Generation)
-      g.generation_size = generation_size
-      g
     def reset!
       @generation = nil
       @generation_number = 0
     end
-  
+
     def next!
       @generation_number += 1
     
+      @generation ||= new_generation
+      @generation.seed
       next_generation = new_generation
     
       # The next generation is created from the previous
@@ -112,6 +107,13 @@ module Decc2050Model
       
       # Start again with the next generation
       self.generation = next_generation
+    end
+  
+    def new_generation
+      g = Array.new
+      g.extend(Generation)
+      g.generation_size = generation_size
+      g
     end
   
     def number_of_children
