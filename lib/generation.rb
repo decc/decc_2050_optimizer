@@ -8,7 +8,6 @@ module Decc2050Model
       space.times do 
         self << Candidate.new
       end
-      sort_by_fitness!
     end
   
     def space
