@@ -75,7 +75,7 @@ module Decc2050Model
 
       start_time = Time.now
 
-      puts "Configured to run for #{number_of_generations} generations with #{generation_size} candidates in each generation, #{children_per_adult} children per adult and a #{chance_of_mutation} chance of mutation.\n\n"
+      puts "Configured to run for #{number_of_generations} generations with #{generation_size} candidates in each generation, #{children_per_adult} children per adult and a #{chance_of_mutation} chance of mutation. Running against DECC 2050 Model #{ModelStructure.instance.reported_calculator_version.downcase}.\n\n"
 
       dump_headers
 
