@@ -25,17 +25,18 @@ module Decc2050Model
       Candidate.new(new_gene)
     end
   
+    # The change of mutation is taken as
+    # meaning the probability of each bit
+    # of information in the gene being changed
     def mutate(chance_of_mutation = 0.01)
-      
-      # We add some random noise so that when number_of_mutations is not a whole number 
-      # we sometimes get the higher value and sometimes get the lower
-      number_of_mutations = ((chance_of_mutation * gene.size) + (rand(2) * 0.5)).round
-      return self if number_of_mutations == 0
-      
+      return self if chance_of_mutation == 0
       new_gene = gene.dup
-      number_of_mutations.times do
-        i = rand(Candidate.acceptable_values.size)
-        new_gene[i] = Candidate.acceptable_values[i].random
+      (0...gene.size).each do |i|
+        next if Candidate.acceptable_values[i].size == 1
+        bit_size = (Candidate.acceptable_values[i].size - 1).to_s(2).size
+        if(rand < (bit_size * chance_of_mutation))
+          new_gene[i] = Candidate.acceptable_values[i].random
+        end
       end
       Candidate.new(new_gene)
     end
