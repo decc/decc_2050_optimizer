@@ -32,6 +32,6 @@ end
 File.open(File.join(File.dirname(__FILE__),"optimise_cost.tsv"),'w') do |f|
   o = Decc2050Model::Optimizer.new
   o.dump = f
-  o.run!
+  o.run!(50)
 end
 
