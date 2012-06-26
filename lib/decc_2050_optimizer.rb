@@ -94,7 +94,7 @@ module Decc2050Model
       number_of_candidates_calculated = generation_size * number_of_generations * number_of_children
       candidates_per_second = (number_of_candidates_calculated / elapsed_time).round
 
-      puts "\nThe elapsed time was #{elapsed_time} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
+      puts "\nThe elapsed time was #{elapsed_time.round} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
     end
   
     def reset!
