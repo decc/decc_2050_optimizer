@@ -91,7 +91,7 @@ module Decc2050Model
       puts "\nInspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest_candidate.gene}/primary_energy_chart"
 
       elapsed_time = Time.now - start_time
-      number_of_candidates_calculated = generation_size * number_of_generations * number_of_children
+      number_of_candidates_calculated = number_of_generations * number_of_children
       candidates_per_second = (number_of_candidates_calculated / elapsed_time).round
 
       puts "\nThe elapsed time was #{elapsed_time.round} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
