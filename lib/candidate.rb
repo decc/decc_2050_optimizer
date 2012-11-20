@@ -60,7 +60,7 @@ module Decc2050Model
     @acceptable_values = ModelStructure.instance.types.map.with_index do |type,index|
       if index <= 15 && index !=3 # Decimal points are allowed
         case type
-        when 0, '0'     ; %w[0]
+        when nil, 0, '0'     ; %w[0]
         when 1, '1', 'A'; %w[1]
         when 2, '2', 'B'; %w[1 b c d e f g h i j 2]
         when 3, '3', 'C'; %w[1 b c d e f g h i j 2 l m n o p q r s t 3]
@@ -68,7 +68,7 @@ module Decc2050Model
         end
       else
         case type
-        when 0, '0'     ; %w[0]
+        when nil, 0, '0'     ; %w[0]
         when 1, '1', 'A'; %w[1]
         when 2, '2', 'B'; %w[1 2]
         when 3, '3', 'C'; %w[1 2 3]
