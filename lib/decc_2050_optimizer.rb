@@ -80,8 +80,10 @@ module Decc2050Model
       dump_headers
 
       number_of_generations.times do
+        generation_start_time = Time.now
         next!
-        puts "The fittest candidate in generation #{generation_number} is #{generation.fittest.first.inspect}"
+        generation_time = Time.now - generation_start_time
+        puts "The fittest candidate in generation #{generation_number} is #{generation.fittest.first.inspect} (#{generation_time.round}s #{(generation_size.to_f/generation_time).round(1)} candidates/s)"
         dump_generation
       end
     
@@ -97,18 +99,49 @@ module Decc2050Model
       puts "\nThe elapsed time was #{elapsed_time.round} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
     end
 
-    def simplist_candidate_with_fitness_within( tolerance = 0.015)
-      threshold_to_beat = fittest_candidate.fitness.to_f * (1-tolerance)
-      simplest_gene = fittest_candidate.gene
-      Candidate.acceptable_values.each.with_index do |a,i|
+    # This method prints the marginal fitness values of setting each of the elements 
+    # of the fittest candidate's gene to reveal which choices are most important
+    def marginal_fitness_of_choices
+      gene = fittest_candidate.gene
+      fitness = fittest_candidate.fitness
+      choices = {}
+      Candidate.acceptable_values.each.with_index do |a, i|
         next if a.size == 1
-        trial_gene = simplest_gene.dup
-        trial_gene[i] = '1'
-        trial_candidate = Candidate.new(trial_gene)
-        if trial_candidate.fitness > threshold_to_beat
-          simplest_gene = trial_gene
-        end
+        next if gene[i] == '1'
+        marginal_gene = gene.dup
+        marginal_gene[i] = '1'
+        marginal_candidate = Candidate.new(marginal_gene)
+        drop_in_fitness = fitness - marginal_candidate.fitness
+        choices[i] = drop_in_fitness
       end
+
+      choices = choices.sort_by { |index, drop_in_fitness| drop_in_fitness }.reverse
+
+      puts "Drop in fitness from setting choice to level 1 / trajectory A"
+      choices.each do |index, drop_in_fitness|
+        puts "#{drop_in_fitness} \t #{ModelStructure.instance.names[index]} #{index}"
+      end
+
+      choices
+    end
+
+    # This takes the fittest candidate so far, and tries to simplify it by setting 
+    # elements back to '1' if they make less than the specified tolerance difference
+    # to the overall fitness. This tries to elminate the 'junk DNA' or 'blue eyes/green eyes'
+    # choices that make it through to the fittest candidate not because they are required
+    # but because they make no difference to fitness.
+    def simplist_candidate_with_fitness_within( tolerance = fittest_candidate.fitness.to_f * 0.01)
+      simplest_gene = fittest_candidate.gene.dup
+      cummulative_drop_in_fitness = 0
+
+      marginal_fitness_of_choices.reverse.each do |index, drop_in_fitness|
+        puts "Testing #{index}"
+        break if cummulative_drop_in_fitness + drop_in_fitness > tolerance
+        puts "Simplifying #{index}"
+        simplest_gene[index] = '1'
+        cummulative_drop_in_fitness += drop_in_fitness
+      end
+        
       simplest = Candidate.new(simplest_gene)
       puts "The simplest candidate within #{tolerance} of the fittest candidate's fitness is:"
       p simplest

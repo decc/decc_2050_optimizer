@@ -2,15 +2,13 @@ require_relative '../lib/decc_2050_optimizer'
 
 puts <<EOT
 This optimisation seeks to minimise number of levers that are pursued, while at the same time beating the 2050 greenhouse gas reduction target of a 80% reduction on 1990 levels.
-It doesn't permit any geosequestration.
-
 EOT
 
 
 class Decc2050Model::Candidate
 
   # Set so that only level 1 geosequestration is possible
-  self.acceptable_values[50] = ['1']
+  # self.acceptable_values[50] = ['1']
 
   def calculate_fitness
     return ( [ghg_reduction,80].min * 10) - levers_altered
