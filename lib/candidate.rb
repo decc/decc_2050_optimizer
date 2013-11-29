@@ -53,6 +53,10 @@ module Decc2050Model
       @performance ||= Decc2050ModelResult.calculate_pathway(gene)
     end
   
+    def code
+      @code ||= Decc2050ModelUtilities.new.convert_letters_to_float(gene.split(''))
+    end
+  
     def inspect
       "#{gene} (with a greenhouse gas reduction of #{fitness}%)"
     end

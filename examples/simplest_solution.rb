@@ -8,7 +8,9 @@ EOT
 class Decc2050Model::Candidate
 
   # Set so that only level 1 geosequestration is possible
-  # self.acceptable_values[50] = ['1']
+  self.acceptable_values[50] = ['1']
+  # Set so that only level 1 or 2 of industry growth is possible (no collapsing industry)
+  self.acceptable_values[40] = ['1']
 
   def calculate_fitness
     return ( [ghg_reduction,80].min * 10) - levers_altered
