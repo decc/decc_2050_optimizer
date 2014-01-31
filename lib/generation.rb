@@ -46,6 +46,7 @@ module Decc2050Model
       end
     end
 
+    # The following are required when parallel processing
 
     def parallel_processing?
       sender && receiver
@@ -60,13 +61,15 @@ module Decc2050Model
       @sent_pathways = {}
       each do |candidate|
         @sent_pathways[candidate.gene] = candidate
-        sender.send(candidate.gene)
+        sender.send_string(candidate.gene, 0)
       end
     end
 
     def gather_results_back
+      raw_data = ""
       size.times do 
-        performance = Marshal.load(receiver.recv(0))
+        receiver.recv_string raw_data
+        performance = Marshal.load(raw_data)
         gene = performance[:_id]
         @sent_pathways[gene].performance = performance
       end

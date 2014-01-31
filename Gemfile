@@ -1,4 +1,5 @@
 source 'http://rubygems.org'
 gem 'decc_2050_model'
 
-# gem 'zmq', :group => 'parallel_processing'
+# Uncomment if you want to do parallel processing
+# gem 'ffi-rzmq', :group => 'parallel_processing'

@@ -1,4 +1,4 @@
-require 'zmq'
+require 'ffi-rzmq'
 require 'decc_2050_model'
 
 context = ZMQ::Context.new(1)
@@ -8,9 +8,10 @@ receiver.connect("tcp://localhost:5557")
 
 sender = context.socket(ZMQ::PUSH)
 sender.connect("tcp://localhost:5558")
+gene = ""
 
 while true
-  gene = receiver.recv(0)
+  receiver.recv_string gene
   result = Decc2050ModelResult.calculate_pathway(gene)
-  sender.send(Marshal.dump(result))
+  sender.send_string(Marshal.dump(result), 0)
 end

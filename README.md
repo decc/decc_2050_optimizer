@@ -50,7 +50,15 @@ The code has support for parallel processing. To use it, you must first run a fe
 
     bundle exec lib/parallel_processing_worker.rb
 
-Then you should set the optimiser to use the workers, take a look at examples/optimise_cost_no_nuclear_parallel.rb or run it by:
+Then you should set the optimiser to use the workers. This means adding:
+
+    optimiser.setup_parallel_processing
+
+before calling
+    
+    optimiser.run!
+
+For an example, take a look at examples/optimise_cost_no_nuclear_parallel.rb or run it by:
     
     bundle exec examples/optimise_cost_no_nuclear_parallel.rb
 

@@ -71,7 +71,10 @@ module Decc2050Model
     # If you choose to use the parallel processing version you 
     # need to call this before calling run
     def setup_parallel_processing
-      require 'zmq'
+      unless require 'ffi-rzmq' 
+        puts "For parallel processing, zeromq and the ruby interface (ffi-rzmq) need to be installed"
+      end
+
       @context = ZMQ::Context.new(1)
 
       @sender = @context.socket(ZMQ::PUSH)
