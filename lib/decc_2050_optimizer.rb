@@ -95,6 +95,13 @@ module Decc2050Model
       elapsed_time = Time.now - start_time
       number_of_candidates_calculated = number_of_generations * number_of_children
       candidates_per_second = (number_of_candidates_calculated / elapsed_time).round
+      puts
+      puts "The following candidates had similar levels of fitness:"
+      generation.within_tolerance_of_fittest(@fitness_tolerance).each do |candidate|
+        p candidate
+      end
+
+      simplist_candidate_with_fitness_within
 
       puts "\nThe elapsed time was #{elapsed_time.round} seconds for #{number_of_candidates_calculated} candidates, a rate of #{candidates_per_second} candidates per second.\n\n"
     end
@@ -119,7 +126,7 @@ module Decc2050Model
 
       puts "Drop in fitness from setting choice to level 1 / trajectory A"
       choices.each do |index, drop_in_fitness|
-        puts "#{drop_in_fitness} \t #{ModelStructure.instance.names[index]} #{index}"
+        puts "#{drop_in_fitness}\t#{index}\tChanging #{ModelStructure.instance.names[index]} from level #{gene[index]} to level 1"
       end
 
       choices
@@ -130,18 +137,26 @@ module Decc2050Model
     # to the overall fitness. This tries to elminate the 'junk DNA' or 'blue eyes/green eyes'
     # choices that make it through to the fittest candidate not because they are required
     # but because they make no difference to fitness.
-    def simplist_candidate_with_fitness_within( tolerance = fittest_candidate.fitness.to_f * 0.01)
+    def simplist_candidate_with_fitness_within( tolerance = fittest_candidate.fitness.to_f * @fitness_tolerance)
       simplest_gene = fittest_candidate.gene.dup
-      cummulative_drop_in_fitness = 0
+      acceptable_fittness = fittest_candidate.fitness.to_f - tolerance
 
-      marginal_fitness_of_choices.reverse.each do |index, drop_in_fitness|
-        puts "Testing #{index}"
-        break if cummulative_drop_in_fitness + drop_in_fitness > tolerance
-        puts "Simplifying #{index}"
-        simplest_gene[index] = '1'
-        cummulative_drop_in_fitness += drop_in_fitness
+      puts
+
+      Candidate.acceptable_values.each.with_index do |a, i|
+        #puts "Testing setting #{ModelStructure.instance.names[i]} to 1"
+        next if a.size == 1
+        next if simplest_gene[i] == '1'
+        next unless a.include?('1')
+        test_gene = simplest_gene.dup
+        test_gene[i] = '1'
+        test_candidate = Candidate.new(test_gene)
+        if test_candidate.fitness > acceptable_fittness
+          #puts "Accepting the change"
+          simplest_gene = test_gene
+        end
       end
-        
+
       simplest = Candidate.new(simplest_gene)
       puts "The simplest candidate within #{tolerance} of the fittest candidate's fitness is:"
       p simplest

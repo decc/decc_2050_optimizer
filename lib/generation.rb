@@ -39,6 +39,13 @@ module Decc2050Model
       first.fitness
     end
 
+    def within_tolerance_of_fittest(tolerance)
+      minimum_fitness = fittest_candidates_fitness.to_f * (1.0-tolerance)
+      return self.select do |candidate|
+        candidate.fitness.to_f > minimum_fitness
+      end
+    end
+
 
     def parallel_processing?
       sender && receiver
