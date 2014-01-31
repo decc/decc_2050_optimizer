@@ -38,7 +38,7 @@ module Decc2050Model
     attr_accessor :dump
 
     # If true, will not dump header into dump file. Default is nil (which is 
-    # the same as false in ruby) so headers will be dumped on every run.
+    # the same as false in ruby) so headers WILL be dumped on every run.
     attr_accessor :do_not_dump_header
     
     # If specified, this will be prepended to each row in the dump
@@ -46,12 +46,24 @@ module Decc2050Model
     
     # If specified, this will be prepended to the header of the dump file
     attr_accessor :dump_prefix_header
+
+    # If given a block, will be passed the fittest gene. It can then be used
+    # to print a url for viewing that candidate. By default will print:
+    # Inspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/GENE/primary_energy_chart
+    attr_accessor :print_link_to_gene_block
     
+    # The routine doesn't just print the fittest candidate, but also candidates that are within
+    # this tolerance of the fittest candidate. Default is 0.005 (i.e., within 0.5% of the fitness
+    # of the fittest candidate)
+    attr_accessor :fitness_tolerance
+
     def initialize
       @generation_number = 0
       @generation_size = calculate_default_generation_size
       @children_per_adult = 2
       @chance_of_mutation = 0.01
+      @print_link_to_gene_block = lambda { |gene| puts "\nInspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{gene}/primary_energy_chart" }
+      @fitness_tolerance = 0.005
 
       @generation = new_generation
     end
@@ -86,15 +98,16 @@ module Decc2050Model
         puts "The fittest candidate in generation #{generation_number} is #{generation.fittest.first.inspect} (#{generation_time.round}s #{(generation_size.to_f/generation_time).round(1)} candidates/s)"
         dump_generation
       end
-    
-      puts "\nThe fittest candiate after #{generation_number} generations was:"
-      p fittest_candidate
-    
-      puts "\nInspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{fittest_candidate.gene}/primary_energy_chart"
 
       elapsed_time = Time.now - start_time
       number_of_candidates_calculated = number_of_generations * number_of_children
       candidates_per_second = (number_of_candidates_calculated / elapsed_time).round
+    
+      puts
+      puts "The fittest candiate after #{generation_number} generations was:"
+      p fittest_candidate
+      print_link_to_gene_block.call(fittest_candidate.gene)
+
       puts
       puts "The following candidates had similar levels of fitness:"
       generation.within_tolerance_of_fittest(@fitness_tolerance).each do |candidate|
@@ -161,7 +174,7 @@ module Decc2050Model
       puts "The simplest candidate within #{tolerance} of the fittest candidate's fitness is:"
       p simplest
 
-      puts "\nInspect this candidate online at http://2050-calculator-tool.decc.gov.uk/pathways/#{simplest.gene}/primary_energy_chart"
+      print_link_to_gene_block.call(simplest.gene)
 
       simplest
     end
