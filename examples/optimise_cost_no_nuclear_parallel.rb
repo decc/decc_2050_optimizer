@@ -18,7 +18,7 @@ class Decc2050Model::Candidate
   self.acceptable_values[0] = ['1']
 
   def calculate_fitness
-    return ( [ghg_reduction,80].min * 100) - cost
+    ( [ghg_reduction,80].min * 100) - cost
   end
   
   def cost
@@ -36,8 +36,7 @@ class Decc2050Model::Candidate
 end
 
 o = Decc2050Model::Optimizer.new
-o.generation_size = 10
 o.setup_parallel_processing
-o.run!(10)
+o.run!
 
 
