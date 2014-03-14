@@ -15,7 +15,7 @@ EOT
 class Decc2050Model::Candidate
   
   # Set so that only level 1 nuclear is possible
-  self.acceptable_values[0] = ['1']
+  nuclear_power = ['1']
 
   def calculate_fitness
     ( [ghg_reduction,80].min * 100) - cost

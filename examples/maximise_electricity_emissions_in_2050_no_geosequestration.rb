@@ -26,10 +26,9 @@ end
 
 
 class Decc2050Model::Candidate
-  #
+ 
   # Set so that only level 1 geosequestration is possible
-  self.acceptable_values[50] = ['1']
-  
+  self.geosequestration = ['1']
 
   def calculate_fitness
     return ( [ghg_reduction,80].min * 50) + electricity_emissions_in_2050
