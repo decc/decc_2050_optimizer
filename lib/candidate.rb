@@ -40,6 +40,21 @@ module Decc2050Model
       @acceptable_values ||= default_acceptable_values
     end
 
+    # This is a general override.
+    # E.g., Candidate.only_permit_levels_up_to 2
+    # would mean no choice could have a value above 2
+    def only_permit_levels_up_to(max_level)
+      maximum_acceptable_choice_array_size = max_level.to_i
+      maximum_acceptable_choice_array_size_decimal = ((max_level-1)*10)+1
+
+      acceptable_values.map!.with_index do |ok_values, index|
+        if ok_values.size > 4 # Then this choice permits decimal points
+          ok_values.slice(0,maximum_acceptable_choice_array_size_decimal)
+        else
+          ok_values.slice(0,maximum_acceptable_choice_array_size)
+        end
+      end
+    end
 
     # This creates a handy set of methods for the user to specify
     # a different set of acceptable values. 
@@ -54,6 +69,7 @@ module Decc2050Model
       end
     end
   
+
     # This is handy
     def random_gene
       acceptable_values.map.with_index do |a,i|
