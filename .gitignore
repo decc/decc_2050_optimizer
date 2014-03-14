@@ -5,3 +5,5 @@ examples/*.pdf
 examples/.Rhistory
 
 *.swp
+
+*.swo
