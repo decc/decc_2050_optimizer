@@ -58,6 +58,10 @@ module Decc2050Model
     attr_accessor :fitness_tolerance
 
     def initialize
+      reset
+    end
+
+    def reset
       @generation_number = 0
       @generation_size = calculate_default_generation_size
       @children_per_adult = 2

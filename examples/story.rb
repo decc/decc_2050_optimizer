@@ -44,6 +44,9 @@ end
 
 results = File.open('results','w')
 
+o = Decc2050Model::Optimizer.new
+o.setup_parallel_processing
+
 0.step(750,50).each do |emissions_target|
 
  puts "Lowest central cost with #{emissions_target} MtCO2e in 2050"
@@ -52,8 +55,7 @@ results = File.open('results','w')
       return -cost - ((emissions_target - emissions).abs * 5000)
   end
 
-  o = Decc2050Model::Optimizer.new
-  o.setup_parallel_processing
+  o.reset
   o.run!(40)
   best = o.fittest_candidate
 
